@@ -8,6 +8,7 @@ from typing import Optional
 from datetime import date, datetime
 
 from sqlalchemy import Date, Text, Column, String, Boolean, DateTime, text
+from sqlalchemy.orm import relationship
 from sqlalchemy_utils import EmailType
 from sqlalchemy.dialects import postgresql
 
@@ -39,3 +40,5 @@ class User(BaseModel):
         default={},
         server_default=text("'{}'::jsonb"),
     )
+
+    mods = relationship("Mod", back_populates="user")

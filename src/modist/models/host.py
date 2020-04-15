@@ -90,6 +90,7 @@ class Host(BaseModel):
 
     publisher: HostPublisher = relationship("HostPublisher", back_populates="hosts")
     releases: List["HostRelease"] = relationship("HostRelease", back_populates="host")
+    mods = relationship("Mod", back_populates="host")
 
 
 class HostRelease(BaseModel):

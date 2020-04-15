@@ -19,6 +19,7 @@ from sqlalchemy import (
     UniqueConstraint,
     text,
 )
+from sqlalchemy.orm import relationship
 from sqlalchemy_utils import URLType
 from sqlalchemy.dialects import postgresql
 
@@ -98,6 +99,8 @@ class Category(Database.Entity, TimestampMixin, IsActiveMixin):
         default=[],
         server_default="{}",
     )
+
+    mods = relationship("Mod", back_populates="category")
 
 
 class AgeRestriction(BaseModel):
