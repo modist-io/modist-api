@@ -114,6 +114,7 @@ class ModReleaseArtifact(BaseModel):
     name: str = Column(Text, nullable=False)
     path: str = Column(Text, nullable=False)
     size: int = Column(Integer, nullable=False)
+    mimetype: str = Column(Text, nullable=False, default="application/octet-stream")
     checksum: str = Column(String(length=64), nullable=False)
     mod_release_id: UUID = Column(
         postgresql.UUID(as_uuid=True),

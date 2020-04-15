@@ -44,6 +44,7 @@ def upgrade():
         sa.Column("name", sa.Text(), nullable=False),
         sa.Column("path", sa.Text(), nullable=False),
         sa.Column("size", sa.Integer(), nullable=False),
+        sa.Column("mimetype", sa.Text(), nullable=False),
         sa.Column("checksum", sa.String(length=64), nullable=False),
         sa.Column("mod_release_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.ForeignKeyConstraint(
