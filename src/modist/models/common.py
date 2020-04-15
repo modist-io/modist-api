@@ -6,7 +6,7 @@
 
 import enum
 from uuid import UUID
-from typing import List
+from typing import List, Optional
 
 from furl.furl import furl
 from sqlalchemy import (
@@ -113,3 +113,12 @@ class AgeRestriction(BaseModel):
     description: str = Column(Text, nullable=False)
     avatar_image: str = Column(String(length=255))
     minimum_age: int = Column(Integer, nullable=False)
+
+
+class Tag(BaseModel):
+    """The common tag model for content tags."""
+
+    __tablename__ = "tag"
+
+    name: str = Column(String(length=64), nullable=False)
+    description: Optional[str] = Column(Text)
