@@ -1,0 +1,63 @@
+[build-system]
+  requires = ["setuptools>=36.2.2", "wheel>=0.28.0"]
+
+[tool.black]
+  line-length = 88
+  target_version = ['py37']
+  include = '\.pyi?$'
+  exclude = '''
+  (
+    /(
+      \.eggs
+      | \.git
+      | \.mypy_cache
+      | _build
+      | build
+      | dist
+    )/
+  )
+  '''
+
+[tool.towncrier]
+  package = "modist_api"
+  package_dir = "src"
+  filename = "CHANGELOG.rst"
+  directory = "news/"
+  title_format = "`{version} <https://github.com/modist-io/modist-api/releases/tag/v{version}>`_ (*{project_date}*)"
+  issue_format = '`#{issue} <https://github.com/modist-io/modist-api/issues/{issue}>`_'
+  template = 'tasks/CHANGELOG.rst.jinja2'
+
+  [[tool.towncrier.type]]
+  directory = 'feature'
+  name = 'Features'
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = 'bugfix'
+  name = 'Bug Fixes'
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = 'doc'
+  name = 'Documentation'
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = 'trivial'
+  name = 'Trivial Changes'
+  showcontent = false
+
+  [[tool.towncrier.type]]
+  directory = 'misc'
+  name = 'Miscellaneous'
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = 'removal'
+  name = 'Removals'
+  showcontent = true
+
+  [[tool.towncrier.type]]
+  directory = 'deprecation'
+  name = 'Deprecations'
+  showcontent = true

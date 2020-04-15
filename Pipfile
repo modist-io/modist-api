@@ -1,0 +1,32 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+modist-api = {path = ".", editable = true, extras = ["test", "docs"]}
+
+[dev-packages]
+twine = "*"
+invoke = "*"
+colorama = "*"
+parver = "*"
+black = "*"
+flake8 = "*"
+flake8-docstrings = "*"
+towncrier = "*"
+vprof = "*"
+mypy = "*"
+pytype = "*"
+pre-commit = "*"
+pyprof2calltree = "*"
+readme_renderer = {version = "*", extras = ["md"]}
+pip-licenses = "*"
+rope = "*"
+wheel = "*"
+
+[requires]
+python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true
