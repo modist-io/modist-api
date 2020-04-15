@@ -25,13 +25,17 @@ from modist import models  # noqa isort:skip
 from modist.db import Database  # noqa isort:skip
 
 
+DATABASE_URL_VARNAME = "DATABASE_URL"
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
 # this is where we passthrough environment variables into the .ini config.
 section = config.config_ini_section
-config.set_section_option(section, "DATABASE_URL", os.environ.get("DATABASE_URL"))
+config.set_section_option(
+    section, DATABASE_URL_VARNAME, os.environ.get(DATABASE_URL_VARNAME)
+)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -62,7 +66,7 @@ def run_migrations_offline():
 
     """
 
-    url = config.get_main_option("sqlalchemy.url")
+    url = os.environ.get(DATABASE_URL_VARNAME)
     context.configure(
         url=url,
         target_metadata=target_metadata,
