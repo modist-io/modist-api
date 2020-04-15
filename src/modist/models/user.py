@@ -58,8 +58,12 @@ class User(BaseModel):
     mods = relationship("Mod", back_populates="user")
     user_bans = relationship("Ban", back_populates="user")
     sent_messages: List["Message"] = relationship("Message", back_populates="user")
+    received_user_messages: List["UserMessage"] = relationship(
+        "UserMessage", back_populates="user"
+    )
 
     bans = association_proxy("user_bans", "ban")
+    received_messages = association_proxy("received_user_messages", "message")
 
 
 class UserBan(Database.Entity, TimestampMixin):
@@ -105,3 +109,24 @@ class Message(BaseModel):
     )
 
     user: User = relationship("User", back_populates="sent_messages")
+
+
+class UserMessage(Database.Entity, TimestampMixin):
+    """The ORM association model for m2m realtionships between users and messages."""
+
+    __tablename__ = "user_message"
+    __table_args__ = (PrimaryKeyConstraint("user_id", "message_id"),)
+
+    user_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("user.id", ondelete="cascade"),
+        nullable=False,
+    )
+    message_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("message.id", ondelete="cascade"),
+        nullable=False,
+    )
+
+    user: User = relationship("User", back_populates="received_user_messages")
+    message: Message = relationship("Message")
