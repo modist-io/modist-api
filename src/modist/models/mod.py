@@ -7,10 +7,12 @@
 from uuid import UUID
 from typing import List, Optional
 
+from semver import VersionInfo
 from sqlalchemy import (
     Text,
     Column,
     String,
+    Integer,
     ForeignKey,
     UniqueConstraint,
     PrimaryKeyConstraint,
@@ -20,6 +22,7 @@ from sqlalchemy.dialects import postgresql
 from sqlalchemy.ext.associationproxy import association_proxy
 
 from ..db import Database
+from ._types import SemverType
 from ._common import BaseModel
 from ._mixins import TimestampMixin
 
@@ -61,9 +64,34 @@ class Mod(BaseModel):
     host = relationship("Host", back_populates="mods")
     category = relationship("Category", back_populates="mods")
     age_restriction = relationship("AgeRestriction")
+    mod_releases: List["ModRelease"] = relationship("ModRelease", back_populates="mod")
     mod_tags: List["ModTag"] = relationship("ModTag", back_populates="mod")
 
     tags = association_proxy("mod_tags", "tag")
+
+
+class ModRelease(BaseModel):
+    """The ORM representation of a mod release."""
+
+    __tablename__ = "mod_release"
+
+    version: VersionInfo = Column(SemverType, nullable=False)
+    description: Optional[str] = Column(Text)
+    size: int = Column(Integer, nullable=False)
+    checksum: str = Column(String(length=64), nullable=False)
+    mod_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("mod.id", ondelete="cascade"),
+        nullable=False,
+    )
+    host_release_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("host_release.id", ondelete="cascade"),
+        nullable=False,
+    )
+
+    mod: Mod = relationship("Mod", back_populates="mod_releases")
+    host_release = relationship("HostRelease", back_populates="mod_releases")
 
 
 class ModTag(Database.Entity, TimestampMixin):

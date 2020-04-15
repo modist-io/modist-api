@@ -5,7 +5,7 @@
 """
 """
 
-from .mod import Mod, ModBan, ModTag
+from .mod import Mod, ModBan, ModTag, ModRelease
 from .host import Host, HostRelease, HostPublisher, HostPublisherSocial
 from .user import User
 from .common import Ban, Tag, Social, Category, AgeRestriction
@@ -24,4 +24,5 @@ __all__ = [
     "ModTag",
     "Ban",
     "ModBan",
+    "ModRelease",
 ]

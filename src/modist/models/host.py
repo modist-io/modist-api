@@ -107,3 +107,4 @@ class HostRelease(BaseModel):
     )
 
     host: Host = relationship("Host", back_populates="releases")
+    mod_releases = relationship("ModRelease", back_populates="host_release")
