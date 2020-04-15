@@ -47,6 +47,7 @@ class Social(BaseModel):
     """The common social model for tying social related models to external URLs."""
 
     __tablename__ = "social"
+    __table_args__ = (UniqueConstraint("type", "url"),)
 
     type: SocialType = Column(
         Enum(SocialType), nullable=False, default=SocialType.GENERIC

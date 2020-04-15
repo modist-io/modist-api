@@ -54,7 +54,7 @@ def upgrade():
         sa.ForeignKeyConstraint(["host_id"], ["host.id"], ondelete="cascade"),
         sa.ForeignKeyConstraint(["user_id"], ["user.id"], ondelete="cascade"),
         sa.ForeignKeyConstraint(
-            ["age_restriction_id"], ["age_restriction.id"], ondelete="cascade"
+            ["age_restriction_id"], ["age_restriction.id"], ondelete="set null"
         ),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("slug"),

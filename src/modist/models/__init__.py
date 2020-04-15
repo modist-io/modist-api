@@ -8,7 +8,7 @@
 from .mod import Mod
 from .host import Host, HostRelease, HostPublisher, HostPublisherSocial
 from .user import User
-from .common import Social, Category
+from .common import Social, Category, AgeRestriction
 
 __all__ = [
     "User",
@@ -19,4 +19,5 @@ __all__ = [
     "HostPublisherSocial",
     "Category",
     "Mod",
+    "AgeRestriction",
 ]

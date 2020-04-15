@@ -11,6 +11,7 @@ from sqlalchemy.dialects import postgresql
 from modist.models.common import SocialType
 
 from alembic import op
+from alembic.operations.toimpl import drop_constraint
 
 # revision identifiers, used by Alembic.
 revision = "fe9c31ba1c0e"
