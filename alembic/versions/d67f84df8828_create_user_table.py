@@ -51,8 +51,8 @@ def upgrade():
         sa.Column("family_name", sa.String(length=64), nullable=True),
         sa.Column("display_name", sa.String(length=64), nullable=False),
         sa.Column("bio", sa.Text(), nullable=True),
-        sa.Column("avatar_image", sa.String(length=64), nullable=True),
-        sa.Column("status_emoji", sa.String(length=64), nullable=True),
+        sa.Column("avatar_image", sa.String(length=255), nullable=True),
+        sa.Column("status_emoji", sa.String(length=255), nullable=True),
         sa.Column("status", sa.String(length=128), nullable=True),
         sa.Column(
             "preferences",

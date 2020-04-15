@@ -4,22 +4,10 @@
 
 """Contains user related SQLAlchemy models."""
 
-from uuid import UUID
-from typing import List, Optional
+from typing import Optional
 from datetime import date, datetime
 
-from sqlalchemy import (
-    Date,
-    Text,
-    Column,
-    String,
-    Boolean,
-    DateTime,
-    ForeignKey,
-    PrimaryKeyConstraint,
-    text,
-)
-from sqlalchemy.orm import relationship
+from sqlalchemy import Date, Text, Column, String, Boolean, DateTime, text
 from sqlalchemy_utils import EmailType
 from sqlalchemy.dialects import postgresql
 
@@ -42,8 +30,8 @@ class User(BaseModel):
     family_name: Optional[str] = Column(String(length=64))
     display_name: str = Column(String(length=64), nullable=False, unique=True)
     bio: Optional[str] = Column(Text)
-    avatar_image: Optional[str] = Column(String(length=64))
-    status_emoji: Optional[str] = Column(String(length=64))
+    avatar_image: Optional[str] = Column(String(length=255))
+    status_emoji: Optional[str] = Column(String(length=255))
     status: Optional[str] = Column(String(length=128))
     preferences: dict = Column(
         postgresql.JSONB,
