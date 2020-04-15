@@ -92,6 +92,27 @@ class ModRelease(BaseModel):
 
     mod: Mod = relationship("Mod", back_populates="mod_releases")
     host_release = relationship("HostRelease", back_populates="mod_releases")
+    artifacts: List["ModReleaseArtifact"] = relationship(
+        "ModReleaseArtifact", back_populates="mod_release"
+    )
+
+
+class ModReleaseArtifact(BaseModel):
+    """The ORM representation of a mod release artifact."""
+
+    __tablename__ = "mod_release_artifact"
+
+    name: str = Column(Text, nullable=False)
+    path: str = Column(Text, nullable=False)
+    size: int = Column(Integer, nullable=False)
+    checksum: str = Column(String(length=64), nullable=False)
+    mod_release_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("mod_release.id", ondelete="cascade"),
+        nullable=False,
+    )
+
+    mod_release: ModRelease = relationship("ModRelease", back_populates="artifacts")
 
 
 class ModTag(Database.Entity, TimestampMixin):
