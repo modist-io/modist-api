@@ -95,6 +95,11 @@ class ModRelease(BaseModel):
     artifacts: List["ModReleaseArtifact"] = relationship(
         "ModReleaseArtifact", back_populates="mod_release"
     )
+    release_dependencies: List["ModReleaseDependency"] = relationship(
+        "ModReleaseDependency", back_populates="release"
+    )
+
+    dependencies = association_proxy("release_dependencies", "dependency")
 
 
 class ModReleaseArtifact(BaseModel):
@@ -113,6 +118,30 @@ class ModReleaseArtifact(BaseModel):
     )
 
     mod_release: ModRelease = relationship("ModRelease", back_populates="artifacts")
+
+
+class ModReleaseDependency(Database.Entity, TimestampMixin):
+    """The ORM representation of a mod release dependency."""
+
+    __tablename__ = "mod_release_dependency"
+    __table_args__ = (PrimaryKeyConstraint("mod_release_id", "mod_id"),)
+
+    mod_release_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("mod_release.id", ondelete="cascade"),
+        nullable=False,
+    )
+    mod_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("mod.id", ondelete="cascade"),
+        nullable=False,
+    )
+    version_expression: str = Column(Text, nullable=False)
+
+    release: "ModRelease" = relationship(
+        "ModRelease", back_populates="release_dependencies"
+    )
+    dependency: "Mod" = relationship("Mod")
 
 
 class ModTag(Database.Entity, TimestampMixin):
