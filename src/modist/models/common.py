@@ -147,6 +147,16 @@ class Notification(BaseModel):
     priority: int = Column(Integer, default=0)
 
 
+class SiteNotification(BaseModel):
+    """The common notification model for site-wide notifications."""
+
+    __tablename__ = "site_notification"
+
+    released_at: datetime = Column(DateTime(timezone=True), nullable=False)
+    title: str = Column(String(length=64), nullable=False)
+    content: str = Column(Text, nullable=False)
+
+
 class VirusDetection(BaseModel):
     """The common virus detection model for storing evaluated checksums."""
 

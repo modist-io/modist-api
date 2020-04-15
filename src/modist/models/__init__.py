@@ -24,6 +24,7 @@ from .common import (
     Notification,
     AgeRestriction,
     VirusDetection,
+    SiteNotification,
 )
 
 __all__ = [
@@ -49,4 +50,5 @@ __all__ = [
     "UserMessage",
     "Notification",
     "VirusDetection",
+    "SiteNotification",
 ]
