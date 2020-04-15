@@ -15,7 +15,7 @@ from .mod import (
     ModReleaseDependency,
 )
 from .host import Host, HostRelease, HostPublisher, HostPublisherSocial
-from .user import User
+from .user import User, UserBan
 from .common import Ban, Tag, Social, Category, AgeRestriction
 
 __all__ = [
@@ -36,4 +36,5 @@ __all__ = [
     "ModReleaseArtifact",
     "ModReleaseDependency",
     "ModReleaseConflict",
+    "UserBan",
 ]
