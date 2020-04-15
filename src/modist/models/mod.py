@@ -85,3 +85,24 @@ class ModTag(Database.Entity, TimestampMixin):
 
     mod: Mod = relationship("Mod", back_populates="mod_tags")
     tag = relationship("Tag")
+
+
+class ModBan(Database.Entity, TimestampMixin):
+    """The ORM model for tying mods to bans."""
+
+    __tablename__ = "mod_ban"
+    __table_args__ = (PrimaryKeyConstraint("mod_id", "ban_id"),)
+
+    mod_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("mod.id", ondelete="cascade"),
+        nullable=False,
+    )
+    ban_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("ban.id", ondelete="cascade"),
+        nullable=False,
+    )
+
+    mod: Mod = relationship("Mod", back_populates="mod_bans")
+    ban = relationship("Ban")
