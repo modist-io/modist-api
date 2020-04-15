@@ -5,7 +5,7 @@
 """Contains user related SQLAlchemy models."""
 
 from uuid import UUID
-from typing import Optional
+from typing import List, Optional
 from datetime import date, datetime
 
 from sqlalchemy import (
@@ -57,6 +57,7 @@ class User(BaseModel):
 
     mods = relationship("Mod", back_populates="user")
     user_bans = relationship("Ban", back_populates="user")
+    sent_messages: List["Message"] = relationship("Message", back_populates="user")
 
     bans = association_proxy("user_bans", "ban")
 
@@ -80,3 +81,27 @@ class UserBan(Database.Entity, TimestampMixin):
 
     user: User = relationship("User", back_populates="user_bans")
     ban = relationship("Ban")
+
+
+class Message(BaseModel):
+    """The user message model for authored messages.
+
+    .. note:: Although this model seems like it should be present in ``.common``, this
+        is not a leaf table. Because of it's dependency on the user author relationship,
+        this model is part of the user namespace.
+
+    """
+
+    __tablename__ = "message"
+
+    sent_at: Optional[datetime] = Column(DateTime)
+    received_at: Optional[datetime] = Column(DateTime)
+    read_at: Optional[datetime] = Column(DateTime)
+    content: str = Column(Text, nullable=False)
+    user_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("user.id", ondelete="cascade"),
+        nullable=False,
+    )
+
+    user: User = relationship("User", back_populates="sent_messages")
