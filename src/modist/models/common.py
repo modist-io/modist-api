@@ -145,3 +145,18 @@ class Notification(BaseModel):
     title: str = Column(String(length=64), nullable=False)
     content: str = Column(Text, nullable=False)
     priority: int = Column(Integer, default=0)
+
+
+class VirusDetection(BaseModel):
+    """The common virus detection model for storing evaluated checksums."""
+
+    __tablename__ = "virus_detection"
+
+    detected_at: datetime = Column(
+        DateTime(timezone=True), nullable=False, server_default=text("now()")
+    )
+    detector: str = Column(Text, nullable=False)
+    detector_version: Optional[str] = Column(Text)
+    checksum: str = Column(Text, nullable=False, index=True)
+    is_unsafe: bool = Column(Boolean, nullable=False)
+    description: Optional[str] = Column(Text)

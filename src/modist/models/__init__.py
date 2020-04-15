@@ -16,7 +16,15 @@ from .mod import (
 )
 from .host import Host, HostRelease, HostPublisher, HostPublisherSocial
 from .user import User, Message, UserBan, UserMessage
-from .common import Ban, Tag, Social, Category, Notification, AgeRestriction
+from .common import (
+    Ban,
+    Tag,
+    Social,
+    Category,
+    Notification,
+    AgeRestriction,
+    VirusDetection,
+)
 
 __all__ = [
     "User",
@@ -40,4 +48,5 @@ __all__ = [
     "Message",
     "UserMessage",
     "Notification",
+    "VirusDetection",
 ]
