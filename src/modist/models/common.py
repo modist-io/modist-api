@@ -135,3 +135,13 @@ class Ban(BaseModel):
     is_permanent: bool = Column(Boolean, default=False, server_default="false")
     released_at: datetime = Column(DateTime)
     reason: str = Column(Text, nullable=False)
+
+
+class Notification(BaseModel):
+    """The common notification model for distributing notifications to users."""
+
+    __tablename__ = "notification"
+
+    title: str = Column(String(length=64), nullable=False)
+    content: str = Column(Text, nullable=False)
+    priority: int = Column(Integer, default=0)
