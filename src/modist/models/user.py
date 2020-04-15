@@ -61,9 +61,13 @@ class User(BaseModel):
     received_user_messages: List["UserMessage"] = relationship(
         "UserMessage", back_populates="user"
     )
+    received_user_notifications: List["UserNotification"] = relationship(
+        "UserNotification", back_populates="user"
+    )
 
     bans = association_proxy("user_bans", "ban")
     received_messages = association_proxy("received_user_messages", "message")
+    notifications = association_proxy("recieved_user_notifications", "notification")
 
 
 class UserBan(Database.Entity, TimestampMixin):
@@ -130,3 +134,24 @@ class UserMessage(Database.Entity, TimestampMixin):
 
     user: User = relationship("User", back_populates="received_user_messages")
     message: Message = relationship("Message")
+
+
+class UserNotification(Database.Entity, TimestampMixin):
+    """The ORM association model for m2m relationships between users and notifys."""
+
+    __tablename__ = "user_notification"
+    __table_args__ = (PrimaryKeyConstraint("user_id", "notification_id"),)
+
+    user_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("user.id", ondelete="cascade"),
+        nullable=False,
+    )
+    notification_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("notification.id", ondelete="cascade"),
+        nullable=False,
+    )
+
+    user: User = relationship("User", back_populates="received_user_notifications")
+    notification = relationship("Notification")
