@@ -11,6 +11,7 @@ from .mod import (
     ModTag,
     ModRelease,
     ModReleaseArtifact,
+    ModReleaseConflict,
     ModReleaseDependency,
 )
 from .host import Host, HostRelease, HostPublisher, HostPublisherSocial
@@ -34,4 +35,5 @@ __all__ = [
     "ModRelease",
     "ModReleaseArtifact",
     "ModReleaseDependency",
+    "ModReleaseConflict",
 ]
