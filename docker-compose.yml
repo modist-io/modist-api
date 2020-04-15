@@ -32,6 +32,18 @@ services:
     networks:
       - db
 
+  app:
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: app.Dockerfile
+    restart: always
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgres+psycopg2://application_user:password@db:5432/modist}
+    networks:
+      - db
+
 networks:
   db:
     driver: bridge
