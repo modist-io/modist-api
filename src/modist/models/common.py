@@ -98,3 +98,14 @@ class Category(Database.Entity, TimestampMixin, IsActiveMixin):
         default=[],
         server_default="{}",
     )
+
+
+class AgeRestriction(BaseModel):
+    """The common age restriciton model for flagging age restricted content."""
+
+    __tablename__ = "age_restriction"
+
+    name: str = Column(String(length=64), nullable=False)
+    description: str = Column(Text, nullable=False)
+    avatar_image: str = Column(String(length=255))
+    minimum_age: int = Column(Integer, nullable=False)
