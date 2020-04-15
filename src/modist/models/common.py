@@ -7,6 +7,7 @@
 import enum
 from uuid import UUID
 from typing import List, Optional
+from datetime import datetime
 
 from furl.furl import furl
 from sqlalchemy import (
@@ -14,7 +15,9 @@ from sqlalchemy import (
     Text,
     Column,
     String,
+    Boolean,
     Integer,
+    DateTime,
     ForeignKey,
     UniqueConstraint,
     text,
@@ -122,3 +125,13 @@ class Tag(BaseModel):
 
     name: str = Column(String(length=64), nullable=False)
     description: Optional[str] = Column(Text)
+
+
+class Ban(BaseModel):
+    """The common ban model for registering content bans."""
+
+    __tablename__ = "ban"
+
+    is_permanent: bool = Column(Boolean, default=False, server_default="false")
+    released_at: datetime = Column(DateTime)
+    reason: str = Column(Text, nullable=False)
