@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+  db:
+    build:
+      context: .
+      dockerfile: db.Dockerfile
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: modist
+      POSTGRES_USER: application_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+    ports:
+      - 5432:5432
+    networks:
+      - db
+
+  db-admin:
+    image: dpage/pgadmin4
+    depends_on:
+      - db
+    restart: unless-stopped
+    volumes:
+      - db-admin-data:/root/.pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    ports:
+      - "${PG_ADMIN_PORT:-5050}:80"
+    networks:
+      - db
+
+networks:
+  db:
+    driver: bridge
+
+volumes:
+  db-data:
+    driver: local
+
+  db-admin-data:
+    driver: local
