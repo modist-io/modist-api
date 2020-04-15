@@ -5,6 +5,12 @@ name = "pypi"
 
 [packages]
 modist-api = {path = ".", editable = true, extras = ["test", "docs"]}
+fastapi = "*"
+sqlalchemy = "*"
+sqlalchemy-utils = "*"
+alembic = "*"
+cached-property = "*"
+psycopg2 = "*"
 
 [dev-packages]
 twine = "*"
