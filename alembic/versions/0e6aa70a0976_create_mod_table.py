@@ -49,9 +49,13 @@ def upgrade():
         sa.Column("user_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("host_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("category_id", postgresql.UUID(as_uuid=True), nullable=True),
+        sa.Column("age_restriction_id", postgresql.UUID(as_uuid=True), nullable=True),
         sa.ForeignKeyConstraint(["category_id"], ["category.id"], ondelete="set null"),
         sa.ForeignKeyConstraint(["host_id"], ["host.id"], ondelete="cascade"),
         sa.ForeignKeyConstraint(["user_id"], ["user.id"], ondelete="cascade"),
+        sa.ForeignKeyConstraint(
+            ["age_restriction_id"], ["age_restriction.id"], ondelete="cascade"
+        ),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("slug"),
         sa.UniqueConstraint("user_id", "slug"),

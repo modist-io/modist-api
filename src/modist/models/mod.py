@@ -40,7 +40,11 @@ class Mod(BaseModel):
         ForeignKey("category.id", ondelete="set null"),
         nullable=True,
     )
+    age_restriction_id: UUID = Column(
+        postgresql.UUID(as_uuid=True), ForeignKey("age_restriction.id"), default=None
+    )
 
     user = relationship("User", back_populates="mods")
     host = relationship("Host", back_populates="mods")
     category = relationship("Category", back_populates="mods")
+    age_restriction = relationship("AgeRestriction")
