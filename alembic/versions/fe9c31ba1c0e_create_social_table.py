@@ -49,14 +49,14 @@ def upgrade():
         sa.Column("url", sau.types.url.URLType(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_refresh_updated_at_trigger("social")
     op.create_unique_constraint("uq_social_type", "social", ["type", "url"])
+    op.create_refresh_updated_at_trigger("social")
 
 
 def downgrade():
     """Reverts changes performed by upgrade()."""
 
-    op.drop_constraint("uq_social_type", "social")
     op.drop_refresh_updated_at_trigger("social")
+    op.drop_constraint("uq_social_type", "social")
     op.drop_table("social")
     sa.Enum(SocialType).drop(bind=op.get_bind())
