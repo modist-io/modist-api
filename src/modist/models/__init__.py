@@ -5,7 +5,7 @@
 """
 """
 
-from .host import HostPublisher
+from .host import Host, HostPublisher
 from .user import User
 
-__all__ = ["User", "HostPublisher"]
+__all__ = ["User", "HostPublisher", "Host"]
