@@ -7,5 +7,6 @@
 
 from .host import Host, HostPublisher
 from .user import User
+from .common import Social
 
-__all__ = ["User", "HostPublisher", "Host"]
+__all__ = ["User", "HostPublisher", "Host", "Social"]

@@ -11,6 +11,7 @@ sqlalchemy-utils = "*"
 alembic = "*"
 cached-property = "*"
 psycopg2 = "*"
+furl = "*"
 
 [dev-packages]
 twine = "*"
