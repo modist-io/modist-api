@@ -5,12 +5,26 @@
 """Contains miscellaneous common leaf models."""
 
 import enum
+from uuid import UUID
+from typing import List
 
 from furl.furl import furl
-from sqlalchemy import Enum, Column
+from sqlalchemy import (
+    Enum,
+    Text,
+    Column,
+    String,
+    Integer,
+    ForeignKey,
+    UniqueConstraint,
+    text,
+)
 from sqlalchemy_utils import URLType
+from sqlalchemy.dialects import postgresql
 
+from ..db import Database
 from ._common import BaseModel
+from ._mixins import IsActiveMixin, TimestampMixin
 
 
 class SocialType(enum.Enum):
@@ -22,6 +36,12 @@ class SocialType(enum.Enum):
     GITHUB = "github"
 
 
+class CategoryType(enum.Enum):
+    """Enumeration of allowable category types."""
+
+    MOD = "mod"
+
+
 class Social(BaseModel):
     """The common social model for tying social related models to external URLs."""
 
@@ -31,3 +51,50 @@ class Social(BaseModel):
         Enum(SocialType), nullable=False, default=SocialType.GENERIC
     )
     url: furl = Column(URLType, nullable=False)
+
+
+class Category(Database.Entity, TimestampMixin, IsActiveMixin):
+    """The ORM representation for a generic category.
+
+    .. note:: This table is self-related on ``parent_id`` and should have the
+        ``refresh_depth_and_lineage`` trigger associated to inserts and updates so the
+        logic for dealing with updating ``depth`` and ``lineage`` fields lives within
+        the database rather than some one-off script in the model. You should only ever
+        be concerned with updating the ``parent_id``, and ``depth`` and ``lineage``
+        should refresh themselves.
+
+    .. note:: Because this table is self-relational and needs both ``parent`` and
+        ``children`` relationships, we must avoid defining the ``id`` column with
+        inheritance. Without a direct column definition for ``remote_side`` in the
+        below relationships, we cannot resolve the mapping for the self-relation.
+        For this reason we define the model manually without using the abstracted
+        ``BaseModel`` class.
+
+    """
+
+    __tablename__ = "category"
+    __table_args__ = (UniqueConstraint("parent_id", "name", "type"),)
+
+    id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        server_default=text("uuid_generate_v4()"),
+        primary_key=True,
+    )
+    parent_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("category.id", ondelete="cascade"),
+        nullable=True,
+        default=None,
+    )
+    type: CategoryType = Column(
+        Enum(CategoryType), nullable=False, default=CategoryType.MOD
+    )
+    name: str = Column(String(64), nullable=False)
+    description: str = Column(Text)
+    depth: int = Column(Integer, nullable=False, default=0, server_default="0")
+    lineage: List[UUID] = Column(
+        postgresql.ARRAY(postgresql.UUID(as_uuid=True)),
+        nullable=False,
+        default=[],
+        server_default="{}",
+    )
