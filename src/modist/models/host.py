@@ -6,13 +6,23 @@
 
 from uuid import UUID
 from typing import List, Optional
+from datetime import datetime
 
-from sqlalchemy import Text, Column, String, ForeignKey, PrimaryKeyConstraint
+from sqlalchemy import (
+    Text,
+    Column,
+    String,
+    DateTime,
+    ForeignKey,
+    UniqueConstraint,
+    PrimaryKeyConstraint,
+)
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.ext.associationproxy import association_proxy
 
 from ..db import Database
+from ._types import SemverType
 from .common import Social
 from ._common import BaseModel
 from ._mixins import TimestampMixin
@@ -79,3 +89,20 @@ class Host(BaseModel):
     )
 
     publisher: HostPublisher = relationship("HostPublisher", back_populates="hosts")
+    releases: List["HostRelease"] = relationship("HostRelease", back_populates="host")
+
+
+class HostRelease(BaseModel):
+    """The ORM model representation of a host release."""
+
+    __tablename__ = "host_release"
+    __table_args__ = (UniqueConstraint("host_id", "version"),)
+
+    released_at: Optional[datetime] = Column(DateTime(timezone=True), default=None)
+    version: str = Column(SemverType, nullable=False)
+    description: Optional[str] = Column(Text)
+    host_id: UUID = Column(
+        postgresql.UUID(as_uuid=True), ForeignKey("host.id"), nullable=False
+    )
+
+    host: Host = relationship("Host", back_populates="releases")

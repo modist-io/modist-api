@@ -12,6 +12,7 @@ alembic = "*"
 cached-property = "*"
 psycopg2 = "*"
 furl = "*"
+semver = "*"
 
 [dev-packages]
 twine = "*"
