@@ -68,7 +68,7 @@ class User(BaseModel):
     )
 
     mods = relationship("Mod", back_populates="user")
-    user_bans = relationship("Ban", back_populates="user")
+    user_bans = relationship("UserBan", back_populates="user")
     sent_messages: List["Message"] = relationship("Message", back_populates="user")
     received_user_messages: List["UserMessage"] = relationship(
         "UserMessage", back_populates="user"

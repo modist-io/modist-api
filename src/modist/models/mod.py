@@ -70,12 +70,16 @@ class Mod(BaseModel):
     age_restriction = relationship("AgeRestriction")
     mod_releases: List["ModRelease"] = relationship("ModRelease", back_populates="mod")
     mod_tags: List["ModTag"] = relationship("ModTag", back_populates="mod")
+    mod_bans: List["ModBan"] = relationship("ModBan", back_populates="mod")
     mod_rankings: List["ModRanking"] = relationship("ModRanking", back_populates="mod")
+    mod_ratings: List["ModRating"] = relationship("ModRating", back_populates="mod")
     mod_posts: List["ModPost"] = relationship("ModPost", back_populates="mod")
     mod_images: List["ModImage"] = relationship("ModImage", back_populates="mod")
 
     tags = association_proxy("mod_tags", "tag")
+    bans = association_proxy("mod_bans", "ban")
     rankings = association_proxy("mod_rankings", "ranking")
+    ratings = association_proxy("mod_ratings", "rating")
     posts = association_proxy("mod_posts", "post")
     images = association_proxy("mod_images", "image")
 
