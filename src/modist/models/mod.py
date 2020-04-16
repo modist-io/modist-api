@@ -218,10 +218,13 @@ class ModBan(Database.Entity, TimestampMixin):
 
 
 class ModRanking(Database.Entity, TimestampMixin):
-    """The ORM model for tying mods to rankings."""
+    """The ORM model for tying mods to user produced rankings."""
 
     __tablename__ = "mod_ranking"
-    __table_args__ = (PrimaryKeyConstraint("mod_id", "ranking_id"),)
+    __table_args__ = (
+        PrimaryKeyConstraint("mod_id", "ranking_id"),
+        UniqueConstraint("mod_id", "user_id"),
+    )
 
     mod_id: UUID = Column(
         postgresql.UUID(as_uuid=True),
@@ -233,9 +236,15 @@ class ModRanking(Database.Entity, TimestampMixin):
         ForeignKey("ranking.id", ondelete="cascade"),
         nullable=False,
     )
+    user_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("user.id", ondelete="cascade"),
+        nullable=False,
+    )
 
     mod: Mod = relationship("Mod", back_populates="mod_rankings")
     ranking = relationship("Ranking")
+    user = relationship("User")
 
 
 class ModRating(Database.Entity, TimestampMixin):

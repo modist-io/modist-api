@@ -36,9 +36,12 @@ def upgrade():
         ),
         sa.Column("mod_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column("ranking_id", postgresql.UUID(as_uuid=True), nullable=False),
+        sa.Column("user_id", postgresql.UUID(as_uuid=True), nullable=False),
         sa.ForeignKeyConstraint(["mod_id"], ["mod.id"], ondelete="cascade"),
         sa.ForeignKeyConstraint(["ranking_id"], ["ranking.id"], ondelete="cascade"),
+        sa.ForeignKeyConstraint(["user_id"], ["user.id"], ondelete="cascade"),
         sa.PrimaryKeyConstraint("mod_id", "ranking_id"),
+        sa.UniqueConstraint("mod_id", "user_id"),
     )
     op.create_refresh_updated_at_trigger("mod_ranking")
 
