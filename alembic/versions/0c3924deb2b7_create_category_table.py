@@ -58,11 +58,13 @@ def upgrade():
         sa.UniqueConstraint("parent_id", "name", "type"),
     )
     op.create_refresh_updated_at_trigger("category")
+    op.create_refresh_depth_and_lineage_trigger("category")
 
 
 def downgrade():
     """Reverts changes performed by upgrade()."""
 
+    op.drop_refresh_depth_and_lineage_trigger("category")
     op.drop_refresh_updated_at_trigger("category")
     op.drop_table("category")
     sa.Enum(CategoryType).drop(bind=op.get_bind())
