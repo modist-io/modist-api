@@ -310,7 +310,10 @@ class CommentRanking(Database.Entity, TimestampMixin):
     """The ORM association model for m2m relationships between comments and rankings."""
 
     __tablename__ = "comment_ranking"
-    __table_args__ = (PrimaryKeyConstraint("comment_id", "ranking_id"),)
+    __table_args__ = (
+        PrimaryKeyConstraint("comment_id", "ranking_id"),
+        UniqueConstraint("comment_id", "user_id"),
+    )
 
     comment_id: UUID = Column(
         postgresql.UUID(as_uuid=True),
@@ -322,9 +325,15 @@ class CommentRanking(Database.Entity, TimestampMixin):
         ForeignKey("ranking.id", ondelete="cascade"),
         nullable=False,
     )
+    user_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("user.id", ondelete="cascade"),
+        nullable=False,
+    )
 
     comment: Comment = relationship("Comment", back_populates="comment_rankings")
     ranking = relationship("Ranking")
+    user = relationship("User")
 
 
 class ImageRanking(Database.Entity, TimestampMixin):
