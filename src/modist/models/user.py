@@ -20,6 +20,7 @@ from sqlalchemy import (
     Numeric,
     DateTime,
     ForeignKey,
+    UniqueConstraint,
     PrimaryKeyConstraint,
     text,
 )
@@ -230,6 +231,11 @@ class Image(BaseModel):
     )
 
     user: User = relationship("User")
+    image_rankings: List["ImageRanking"] = relationship(
+        "ImageRanking", back_populates="image"
+    )
+
+    rankings = association_proxy("image_rankings", "ranking")
 
 
 class UserMessage(Database.Entity, TimestampMixin):
@@ -319,3 +325,33 @@ class CommentRanking(Database.Entity, TimestampMixin):
 
     comment: Comment = relationship("Comment", back_populates="comment_rankings")
     ranking = relationship("Ranking")
+
+
+class ImageRanking(Database.Entity, TimestampMixin):
+    """The ORM association model for m2m realtionships between images and rankings."""
+
+    __tablename__ = "image_ranking"
+    __table_args__ = (
+        PrimaryKeyConstraint("image_id", "ranking_id"),
+        UniqueConstraint("image_id", "user_id"),
+    )
+
+    image_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("image.id", ondelete="cascade"),
+        nullable=False,
+    )
+    ranking_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("ranking.id", ondelete="cascade"),
+        nullable=False,
+    )
+    user_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("user.id", ondelete="cascade"),
+        nullable=False,
+    )
+
+    image = relationship("Image", back_populates="image_rankings")
+    ranking = relationship("Ranking")
+    user: User = relationship("User")

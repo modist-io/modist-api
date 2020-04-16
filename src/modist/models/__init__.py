@@ -29,6 +29,7 @@ from .user import (
     UserBan,
     UserSocial,
     UserMessage,
+    ImageRanking,
     CommentRanking,
 )
 from .common import (
@@ -76,4 +77,5 @@ __all__ = [
     "Post",
     "ModPost",
     "Image",
+    "ImageRanking",
 ]
