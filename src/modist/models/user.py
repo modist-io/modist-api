@@ -64,10 +64,12 @@ class User(BaseModel):
     received_user_notifications: List["UserNotification"] = relationship(
         "UserNotification", back_populates="user"
     )
+    user_socials: List["UserSocial"] = relationship("UserSocial", back_populates="user")
 
     bans = association_proxy("user_bans", "ban")
     received_messages = association_proxy("received_user_messages", "message")
     notifications = association_proxy("recieved_user_notifications", "notification")
+    socials = association_proxy("user_socials", "social")
 
 
 class UserBan(Database.Entity, TimestampMixin):
@@ -155,3 +157,29 @@ class UserNotification(Database.Entity, TimestampMixin):
 
     user: User = relationship("User", back_populates="received_user_notifications")
     notification = relationship("Notification")
+
+
+class UserSocial(Database.Entity, TimestampMixin):
+    """The ORM association model for m2m relationships between user and social.
+
+    This model is specifically not an subclass of the base model as we do not want
+    the ``IdMixin`` applied to this association table. The proper primary key
+    identification should be between the ``user_id`` and the ``social_id``.
+    """
+
+    __tablename__ = "user_social"
+    __table_args__ = (PrimaryKeyConstraint("user_id", "social_id"),)
+
+    user_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("user.id", ondelete="cascade"),
+        nullable=False,
+    )
+    social_id: UUID = Column(
+        postgresql.UUID(as_uuid=True), ForeignKey("social.id"), nullable=True
+    )
+
+    # NOTE: we only care about the backref to the ``user`` model as the
+    # ``social``` model is a mutli-many leaf table
+    social = relationship("Social")
+    user: User = relationship("User", back_populates="user_socials")
