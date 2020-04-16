@@ -52,6 +52,7 @@ class User(BaseModel):
         Boolean, nullable=False, default=False, server_default="false"
     )
     email: str = Column(EmailType(length=255), nullable=False, unique=True)
+    password: str = Column(String(length=1024), nullable=False)
     given_name: Optional[str] = Column(String(length=64))
     family_name: Optional[str] = Column(String(length=64))
     display_name: str = Column(String(length=64), nullable=False, unique=True)

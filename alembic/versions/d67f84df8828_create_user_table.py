@@ -47,6 +47,7 @@ def upgrade():
         sa.Column("born_on", sa.Date(), nullable=True),
         sa.Column("is_anonymous", sa.Boolean(), server_default="false", nullable=False),
         sa.Column("email", sau.types.email.EmailType(length=255), nullable=False),
+        sa.Column("password", sa.String(length=1024), nullable=False),
         sa.Column("given_name", sa.String(length=64), nullable=True),
         sa.Column("family_name", sa.String(length=64), nullable=True),
         sa.Column("display_name", sa.String(length=64), nullable=False),

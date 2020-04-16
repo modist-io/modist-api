@@ -8,7 +8,7 @@
 def test_version_importable():
     """Basic sanity check to ensure we can discover the package name and version."""
 
-    from modist_api import __version__
+    from modist import __version__
 
     assert isinstance(__version__.__name__, str)
     assert isinstance(__version__.__version__, str)
