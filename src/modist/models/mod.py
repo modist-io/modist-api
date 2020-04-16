@@ -68,10 +68,12 @@ class Mod(BaseModel):
     mod_tags: List["ModTag"] = relationship("ModTag", back_populates="mod")
     mod_rankings: List["ModRanking"] = relationship("ModRanking", back_populates="mod")
     mod_posts: List["ModPost"] = relationship("ModPost", back_populates="mod")
+    mod_images: List["ModImage"] = relationship("ModImage", back_populates="mod")
 
     tags = association_proxy("mod_tags", "tag")
     rankings = association_proxy("mod_rankings", "ranking")
     posts = association_proxy("mod_posts", "post")
+    images = association_proxy("mod_images", "image")
 
 
 class ModRelease(BaseModel):
@@ -299,3 +301,24 @@ class ModPost(Database.Entity, TimestampMixin):
 
     mod: Mod = relationship("Mod", back_populates="mod_posts")
     post = relationship("Post")
+
+
+class ModImage(Database.Entity, TimestampMixin):
+    """The ORM model for tying models to images."""
+
+    __tablename__ = "mod_image"
+    __table_args__ = (PrimaryKeyConstraint("mod_id", "image_id"),)
+
+    mod_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("mod.id", ondelete="cascade"),
+        nullable=False,
+    )
+    image_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("image.id", ondelete="cascade"),
+        nullable=False,
+    )
+
+    mod: Mod = relationship("Mod", back_populates="mod_images")
+    image = relationship("Image")
