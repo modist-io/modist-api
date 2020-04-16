@@ -15,7 +15,7 @@ from .mod import (
     ModReleaseDependency,
 )
 from .host import Host, HostRelease, HostPublisher, HostPublisherSocial
-from .user import User, Message, UserBan, UserSocial, UserMessage
+from .user import User, Message, Ranking, UserBan, UserSocial, UserMessage
 from .common import (
     Ban,
     Tag,
@@ -52,4 +52,5 @@ __all__ = [
     "VirusDetection",
     "SiteNotification",
     "UserSocial",
+    "Ranking",
 ]

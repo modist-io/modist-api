@@ -14,6 +14,7 @@ from sqlalchemy import (
     Column,
     String,
     Boolean,
+    Integer,
     DateTime,
     ForeignKey,
     PrimaryKeyConstraint,
@@ -115,6 +116,21 @@ class Message(BaseModel):
     )
 
     user: User = relationship("User", back_populates="sent_messages")
+
+
+class Ranking(BaseModel):
+    """The common ranking model for ranking generic content."""
+
+    __tablename__ = "ranking"
+
+    rank: int = Column(Integer, nullable=False)
+    user_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("user.id", ondelete="cascade"),
+        nullable=False,
+    )
+
+    user: User = relationship("User")
 
 
 class UserMessage(Database.Entity, TimestampMixin):
