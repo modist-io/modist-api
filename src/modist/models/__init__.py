@@ -15,6 +15,7 @@ from .mod import (
     ModRelease,
     ModReleaseArtifact,
     ModReleaseConflict,
+    ModReleaseDownload,
     ModReleaseDependency,
 )
 from .host import Host, HostRelease, HostPublisher, HostPublisherSocial
@@ -78,4 +79,5 @@ __all__ = [
     "ModPost",
     "Image",
     "ImageRanking",
+    "ModReleaseDownload",
 ]

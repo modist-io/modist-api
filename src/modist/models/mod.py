@@ -6,6 +6,7 @@
 
 from uuid import UUID
 from typing import List, Optional
+from datetime import datetime
 
 from semver import VersionInfo
 from sqlalchemy import (
@@ -13,18 +14,21 @@ from sqlalchemy import (
     Column,
     String,
     Integer,
+    DateTime,
     ForeignKey,
     UniqueConstraint,
     PrimaryKeyConstraint,
+    text,
 )
 from sqlalchemy.orm import relationship
+from sqlalchemy_utils import IPAddressType
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.ext.associationproxy import association_proxy
 
 from ..db import Database
 from ._types import SemverType
 from ._common import BaseModel
-from ._mixins import TimestampMixin
+from ._mixins import IdMixin, TimestampMixin
 
 
 class Mod(BaseModel):
@@ -177,6 +181,35 @@ class ModReleaseConflict(Database.Entity, TimestampMixin):
         "ModRelease", back_populates="release_conflicts"
     )
     conflict: "Mod" = relationship("Mod")
+
+
+class ModReleaseDownload(Database.Entity, IdMixin, TimestampMixin):
+    """The ORM representation of a mod release download."""
+
+    __tablename__ = "mod_release_download"
+
+    downloaded_at: datetime = Column(
+        DateTime(timezone=True), nullable=False, server_default=text("now()")
+    )
+    ip: str = Column(postgresql.INET, nullable=False)
+    headers: dict = Column(
+        postgresql.JSONB, nullable=False, default={}, server_default=text("'{}'::jsonb")
+    )
+    mod_release_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("mod_release.id", ondelete="set null"),
+        nullable=True,
+    )
+    mod_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("mod.id", ondelete="cascade"),
+        nullable=False,
+    )
+    user_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("user.id", ondelete="set null"),
+        nullable=True,
+    )
 
 
 class ModTag(Database.Entity, TimestampMixin):
