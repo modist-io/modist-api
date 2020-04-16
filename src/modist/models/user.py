@@ -165,6 +165,11 @@ class Comment(Database.Entity, TimestampMixin, IsActiveMixin):
 
     parent = relationship("Comment")
     user: User = relationship("User")
+    comment_rankings: List["CommentRanking"] = relationship(
+        "CommentRanking", back_populates="comment"
+    )
+
+    rankings = association_proxy("comment_rankings", "ranking")
 
 
 class UserMessage(Database.Entity, TimestampMixin):
@@ -233,3 +238,24 @@ class UserSocial(Database.Entity, TimestampMixin):
     # ``social``` model is a mutli-many leaf table
     social = relationship("Social")
     user: User = relationship("User", back_populates="user_socials")
+
+
+class CommentRanking(Database.Entity, TimestampMixin):
+    """The ORM association model for m2m relationships between comments and rankings."""
+
+    __tablename__ = "comment_ranking"
+    __table_args__ = (PrimaryKeyConstraint("comment_id", "ranking_id"),)
+
+    comment_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("comment.id", ondelete="cascade"),
+        nullable=False,
+    )
+    ranking_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("ranking.id", ondelete="cascade"),
+        nullable=False,
+    )
+
+    comment: Comment = relationship("Comment", back_populates="comment_rankings")
+    ranking = relationship("Ranking")

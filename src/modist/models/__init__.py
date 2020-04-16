@@ -16,7 +16,16 @@ from .mod import (
     ModReleaseDependency,
 )
 from .host import Host, HostRelease, HostPublisher, HostPublisherSocial
-from .user import User, Comment, Message, Ranking, UserBan, UserSocial, UserMessage
+from .user import (
+    User,
+    Comment,
+    Message,
+    Ranking,
+    UserBan,
+    UserSocial,
+    UserMessage,
+    CommentRanking,
+)
 from .common import (
     Ban,
     Tag,
@@ -56,4 +65,5 @@ __all__ = [
     "Ranking",
     "ModRanking",
     "Comment",
+    "CommentRanking",
 ]
