@@ -139,3 +139,5 @@ coverage.xml
 # misc
 reports/
 main.py
+
+!*/modist/env/

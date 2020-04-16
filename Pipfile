@@ -13,6 +13,9 @@ cached-property = "*"
 psycopg2 = "*"
 furl = "*"
 semver = "*"
+pyjwt = "*"
+passlib = "*"
+environ-config = "*"
 
 [dev-packages]
 twine = "*"
