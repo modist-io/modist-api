@@ -127,6 +127,23 @@ class Message(BaseModel):
     user: User = relationship("User", back_populates="sent_messages")
 
 
+class Post(BaseModel):
+    """The user post model for posted content."""
+
+    __tablename__ = "post"
+
+    published_at: datetime = Column(DateTime(timezone=True), nullable=True)
+    title: str = Column(String(length=255), nullable=False)
+    content: str = Column(Text, nullable=False)
+    user_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("user.id", ondelete="cascade"),
+        nullable=False,
+    )
+
+    user: User = relationship("User")
+
+
 class Ranking(BaseModel):
     """The common ranking model for ranking generic content."""
 
