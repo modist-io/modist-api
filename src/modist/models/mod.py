@@ -67,9 +67,11 @@ class Mod(BaseModel):
     mod_releases: List["ModRelease"] = relationship("ModRelease", back_populates="mod")
     mod_tags: List["ModTag"] = relationship("ModTag", back_populates="mod")
     mod_rankings: List["ModRanking"] = relationship("ModRanking", back_populates="mod")
+    mod_posts: List["ModPost"] = relationship("ModPost", back_populates="mod")
 
     tags = association_proxy("mod_tags", "tag")
     rankings = association_proxy("mod_rankings", "ranking")
+    posts = association_proxy("mod_posts", "post")
 
 
 class ModRelease(BaseModel):
@@ -276,3 +278,24 @@ class ModRating(Database.Entity, TimestampMixin):
     mod: Mod = relationship("Mod", back_populates="mod_ratings")
     rating = relationship("Rating")
     user = relationship("User")
+
+
+class ModPost(Database.Entity, TimestampMixin):
+    """The ORM model for tying mods to author produced posts."""
+
+    __tablename__ = "mod_post"
+    __table_args__ = (PrimaryKeyConstraint("mod_id", "post_id"),)
+
+    mod_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("mod.id", ondelete="cascade"),
+        nullable=False,
+    )
+    post_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("post.id", ondelete="cascade"),
+        nullable=False,
+    )
+
+    mod: Mod = relationship("Mod", back_populates="mod_posts")
+    post = relationship("Post")
