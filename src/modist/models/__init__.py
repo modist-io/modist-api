@@ -9,6 +9,7 @@ from .mod import (
     Mod,
     ModBan,
     ModTag,
+    ModRating,
     ModRanking,
     ModRelease,
     ModReleaseArtifact,
@@ -68,4 +69,5 @@ __all__ = [
     "Comment",
     "CommentRanking",
     "Rating",
+    "ModRating",
 ]

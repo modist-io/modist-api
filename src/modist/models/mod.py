@@ -231,8 +231,39 @@ class ModRanking(Database.Entity, TimestampMixin):
     ranking_id: UUID = Column(
         postgresql.UUID(as_uuid=True),
         ForeignKey("ranking.id", ondelete="cascade"),
-        nullable=True,
+        nullable=False,
     )
 
     mod: Mod = relationship("Mod", back_populates="mod_rankings")
     ranking = relationship("Ranking")
+
+
+class ModRating(Database.Entity, TimestampMixin):
+    """The ORM model for tying mods to user produced ratings."""
+
+    __tablename__ = "mod_rating"
+    __table_args__ = (
+        PrimaryKeyConstraint("mod_id", "rating_id", "user_id"),
+        UniqueConstraint("mod_id", "user_id", "version"),
+    )
+
+    mod_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("mod.id", ondelete="cascade"),
+        nullable=False,
+    )
+    rating_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("rating.id", ondelete="cascade"),
+        nullable=False,
+    )
+    user_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("user.id", ondelete="cascade"),
+        nullable=False,
+    )
+    version: VersionInfo = Column(SemverType, nullable=False)
+
+    mod: Mod = relationship("Mod", back_populates="mod_ratings")
+    rating = relationship("Rating")
+    user = relationship("User")
