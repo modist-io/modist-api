@@ -18,6 +18,7 @@ from .mod import (
 from .host import Host, HostRelease, HostPublisher, HostPublisherSocial
 from .user import (
     User,
+    Rating,
     Comment,
     Message,
     Ranking,
@@ -66,4 +67,5 @@ __all__ = [
     "ModRanking",
     "Comment",
     "CommentRanking",
+    "Rating",
 ]

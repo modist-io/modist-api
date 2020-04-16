@@ -4,17 +4,20 @@
 
 """Contains user related SQLAlchemy models."""
 
+import enum
 from uuid import UUID
 from typing import List, Optional
 from datetime import date, datetime
 
 from sqlalchemy import (
     Date,
+    Enum,
     Text,
     Column,
     String,
     Boolean,
     Integer,
+    Numeric,
     DateTime,
     ForeignKey,
     PrimaryKeyConstraint,
@@ -28,6 +31,12 @@ from sqlalchemy.ext.associationproxy import association_proxy
 from ..db import Database
 from ._common import BaseModel
 from ._mixins import IsActiveMixin, TimestampMixin
+
+
+class RatingType(enum.Enum):
+    """Enumeration of allowable rating types."""
+
+    MOD = "mod"
 
 
 class User(BaseModel):
@@ -170,6 +179,23 @@ class Comment(Database.Entity, TimestampMixin, IsActiveMixin):
     )
 
     rankings = association_proxy("comment_rankings", "ranking")
+
+
+class Rating(BaseModel):
+    """The common content model for rating generic content."""
+
+    __tablename__ = "rating"
+
+    type: RatingType = Column(Enum(RatingType), nullable=False, default=RatingType.MOD)
+    rating: float = Column(Numeric(precision=3, scale=2), nullable=False)
+    content: str = Column(Text, nullable=False)
+    user_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("user.id", ondelete="cascade"),
+        nullable=False,
+    )
+
+    user: User = relationship("User")
 
 
 class UserMessage(Database.Entity, TimestampMixin):
