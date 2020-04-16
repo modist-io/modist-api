@@ -9,6 +9,7 @@ from .mod import (
     Mod,
     ModBan,
     ModTag,
+    ModRanking,
     ModRelease,
     ModReleaseArtifact,
     ModReleaseConflict,
@@ -53,4 +54,5 @@ __all__ = [
     "SiteNotification",
     "UserSocial",
     "Ranking",
+    "ModRanking",
 ]

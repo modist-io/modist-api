@@ -66,8 +66,10 @@ class Mod(BaseModel):
     age_restriction = relationship("AgeRestriction")
     mod_releases: List["ModRelease"] = relationship("ModRelease", back_populates="mod")
     mod_tags: List["ModTag"] = relationship("ModTag", back_populates="mod")
+    mod_rankings: List["ModRanking"] = relationship("ModRanking", back_populates="mod")
 
     tags = association_proxy("mod_tags", "tag")
+    rankings = association_proxy("mod_rankings", "ranking")
 
 
 class ModRelease(BaseModel):
@@ -213,3 +215,24 @@ class ModBan(Database.Entity, TimestampMixin):
 
     mod: Mod = relationship("Mod", back_populates="mod_bans")
     ban = relationship("Ban")
+
+
+class ModRanking(Database.Entity, TimestampMixin):
+    """The ORM model for tying mods to rankings."""
+
+    __tablename__ = "mod_ranking"
+    __table_args__ = (PrimaryKeyConstraint("mod_id", "ranking_id"),)
+
+    mod_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("mod.id", ondelete="cascade"),
+        nullable=False,
+    )
+    ranking_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("ranking.id", ondelete="cascade"),
+        nullable=True,
+    )
+
+    mod: Mod = relationship("Mod", back_populates="mod_rankings")
+    ranking = relationship("Ranking")
