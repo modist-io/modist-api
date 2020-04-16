@@ -2,8 +2,7 @@
 # Copyright (c) 2020 Modist Team <admin@modist.io>
 # ISC License <https://choosealicense.com/licenses/isc>
 
-"""
-"""
+"""Contains utility methods for handling the environment context building."""
 
 from attr._make import Attribute
 from environ._environ_config import CNF_KEY
