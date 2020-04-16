@@ -215,6 +215,23 @@ class Rating(BaseModel):
     user: User = relationship("User")
 
 
+class Image(BaseModel):
+    """The common content model for user posted images."""
+
+    __tablename__ = "image"
+
+    name: str = Column(String(length=255), nullable=False)
+    description: str = Column(Text, nullable=False)
+    image: str = Column(String(length=255), nullable=False)
+    user_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("user.id", ondelete="cascade"),
+        nullable=False,
+    )
+
+    user: User = relationship("User")
+
+
 class UserMessage(Database.Entity, TimestampMixin):
     """The ORM association model for m2m realtionships between users and messages."""
 
