@@ -27,7 +27,7 @@ from sqlalchemy.ext.associationproxy import association_proxy
 
 from ..db import Database
 from ._common import BaseModel
-from ._mixins import TimestampMixin
+from ._mixins import IsActiveMixin, TimestampMixin
 
 
 class User(BaseModel):
@@ -130,6 +130,40 @@ class Ranking(BaseModel):
         nullable=False,
     )
 
+    user: User = relationship("User")
+
+
+class Comment(Database.Entity, TimestampMixin, IsActiveMixin):
+    """The common comment model for commenting on generic content."""
+
+    __tablename__ = "comment"
+
+    id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        server_default=text("uuid_generate_v4()"),
+        primary_key=True,
+    )
+    parent_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("comment.id", ondelete="cascade"),
+        nullable=True,
+        default=None,
+    )
+    content: str = Column(Text, nullable=False)
+    depth: int = Column(Integer, nullable=False, default=0, server_default="0")
+    lineage: List[UUID] = Column(
+        postgresql.ARRAY(postgresql.UUID(as_uuid=True)),
+        nullable=False,
+        default=[],
+        server_default="{}",
+    )
+    user_id: UUID = Column(
+        postgresql.UUID(as_uuid=True),
+        ForeignKey("user.id", ondelete="cascade"),
+        nullable=False,
+    )
+
+    parent = relationship("Comment")
     user: User = relationship("User")
 
 
