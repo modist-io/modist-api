@@ -16,6 +16,10 @@ semver = "*"
 pyjwt = "*"
 passlib = "*"
 environ-config = "*"
+cachetools = "*"
+python-multipart = "*"
+bcrypt = "*"
+pydantic = {extras = ["email"],version = "*"}
 
 [dev-packages]
 twine = "*"
@@ -35,6 +39,8 @@ readme_renderer = {version = "*", extras = ["md"]}
 pip-licenses = "*"
 rope = "*"
 wheel = "*"
+uvicorn = "*"
+ptvsd = "*"
 
 [requires]
 python_version = "3.7"

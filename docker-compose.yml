@@ -40,7 +40,10 @@ services:
       dockerfile: app.Dockerfile
     restart: always
     environment:
-      DATABASE_URL: ${DATABASE_URL:-postgres+psycopg2://application_user:password@db:5432/modist}
+      DATABASE_URL: ${DATABASE_URL:-postgres://application_user:password@db:5432/modist}
+      APP_SECURITY_SECRET: ${APP_SECURITY_SECRET:-09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7}
+    ports:
+      - "${PORT:-8000}:80"
     networks:
       - db
 

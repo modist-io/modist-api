@@ -25,6 +25,22 @@ class DatabaseEnv(object):
     echo: bool = bool_var(default=False)
 
 
+@config(prefix="APP")
+class AppEnv(object):
+    """The environment variables to define and control the application."""
+
+    @config(prefix="SECURITY")
+    class SecurityEnv(object):
+        """The environment variables related to application security."""
+
+        secret: str = var()
+        algorithm: str = var(default="HS256")
+        access_token_ttl: int = var(default=86400, converter=int)
+
+    security: SecurityEnv = group(SecurityEnv)
+    debug: bool = bool_var(default=False)
+
+
 @config(prefix="")
 class BaseEnv(object):
     """The environment variables required for the Modist platform.
@@ -34,3 +50,4 @@ class BaseEnv(object):
 
     env: Environment = var(default=Environment.DEBUG, converter=Environment)
     database: DatabaseEnv = group(DatabaseEnv)
+    app: AppEnv = group(AppEnv)

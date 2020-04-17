@@ -141,3 +141,4 @@ reports/
 main.py
 
 !*/modist/env/
+!*/modist/app/main.py
