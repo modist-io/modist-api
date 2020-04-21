@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip setuptools wheel
-          python -m pip install --upgrade coverage codacy-coverage codecov
+          python -m pip install --upgrade coverage
           python -m pip install -e .[test] --upgrade
       - name: Run tests
         env:
@@ -35,9 +35,6 @@ jobs:
         run: |
           coverage xml -o coverage.xml
       - name: Publish coverage
-        env:
-          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        run: |
-          python-codacy-coverage -r coverage.xml
-          codecov
+        uses: codacy/codacy-coverage-reporter-action@master
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
