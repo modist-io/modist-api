@@ -18,7 +18,10 @@ ALEMBIC_CONFIG_PATH = Path(__file__).parent.parent / "alembic.ini"
 ALEMBIC_CONFIG = AlembicConfig(ALEMBIC_CONFIG_PATH.as_posix())
 
 
-def pytest_sessionstart(session):
+def pytest_configure(config):
+    if "not db" in config.getoption("-m").lower():
+        return
+
     # before testing session starts, ensure our database structure is up-to-date
     alembic_upgrade(ALEMBIC_CONFIG, "head")
 
