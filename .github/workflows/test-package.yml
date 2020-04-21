@@ -27,7 +27,7 @@ jobs:
           python -m pip install -e .[test] --upgrade
       - name: Run Tests
         env:
-          DATABASE_URL: postgres://applcation_user:password@db:5432/modist
+          DATABASE_URL: postgres://applcation_user:password@localhost:5432/modist
           APP_SECURITY_SECRET: secret
         run: |
           pytest
