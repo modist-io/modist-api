@@ -33,7 +33,7 @@ jobs:
           pytest
       - name: Build coverage
         run: |
-          coverage xml -o coverage.xml
+          coverage xml -o cobertura.xml
       - name: Publish coverage
         uses: codacy/codacy-coverage-reporter-action@master
         with:
