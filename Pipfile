@@ -21,6 +21,7 @@ python-multipart = "*"
 bcrypt = "*"
 pydantic = {extras = ["email"],version = "*"}
 python-rapidjson = "*"
+wrapt = "*"
 
 [dev-packages]
 twine = "*"
