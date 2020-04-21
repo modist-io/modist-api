@@ -16,7 +16,7 @@ from ...models.user import User
 DISPLAY_NAME_PATTERN = re.compile(r"^[a-zA-Z0-9]+(?:[-_.]*[a-zA-Z0-9])+$")
 
 
-class UserPreferences(BaseModel):
+class UserPreferencesSchema(BaseModel):
     """Describes the available user preferences."""
 
     show_nsfw: bool = False
@@ -33,10 +33,10 @@ class UserMutationSchema(BaseModel):
     given_name: Optional[str]
     family_name: Optional[str]
     bio: Optional[str]
-    preferences: Optional[UserPreferences]
+    preferences: Optional[UserPreferencesSchema]
 
     @validator("display_name")
-    def _validate_display_name(self, display_name: str) -> str:
+    def _validate_display_name(cls, display_name: str) -> str:  # noqa
         """Validate that the given display name matches the defined regex pattern.
 
         :param str display_name: The user's display name
@@ -64,7 +64,7 @@ class UserSchema(BaseModel):
     given_name: Optional[str]
     family_name: Optional[str]
     bio: Optional[str]
-    preferences: UserPreferences
+    preferences: UserPreferencesSchema
 
     @classmethod
     def from_model(cls, model: User) -> "UserSchema":

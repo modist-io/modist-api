@@ -39,7 +39,7 @@ jobs:
           python -m pip install -e .[test] --upgrade
       - name: Run Tests
         run: |
-          pytest
+          pytest -m "no db"
       - name: Build Coverage Report
         run: |
           coverage xml -o coverage.xml

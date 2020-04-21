@@ -20,6 +20,7 @@ cachetools = "*"
 python-multipart = "*"
 bcrypt = "*"
 pydantic = {extras = ["email"],version = "*"}
+python-rapidjson = "*"
 
 [dev-packages]
 twine = "*"
@@ -41,6 +42,13 @@ rope = "*"
 wheel = "*"
 uvicorn = "*"
 ptvsd = "*"
+pytest = "*"
+pytest-xdist = "*"
+faker = "*"
+pytest-faker = "*"
+factory-boy = "*"
+pytest-factoryboy = "*"
+pytest-mock = "*"
 
 [requires]
 python_version = "3.7"
